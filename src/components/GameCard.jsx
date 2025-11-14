@@ -1,12 +1,29 @@
-function GameCard({ game }) {
+function GameCard({ game, onDelete }) {
   return (
     <div style={{
       width: "220px",
       background: "#222",
       padding: "10px",
       borderRadius: "10px",
-      border: "1px solid #555"
+      border: "1px solid #555",
+      position: "relative"
     }}>
+      
+      <button 
+        onClick={onDelete}
+        style={{
+          position: "absolute",
+          top: "5px",
+          right: "5px",
+          background: "red",
+          border: "none",
+          padding: "5px",
+          cursor: "pointer"
+        }}
+      >
+        ❌
+      </button>
+
       {game.imagesrc && (
         <img src={game.imagesrc} alt={game.name} style={{ width: "100%", borderRadius: "10px" }} />
       )}

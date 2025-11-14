@@ -9,47 +9,68 @@ function GameForm({ onSubmit }) {
     imagesrc: "",
   });
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!form.name) return alert("El nombre es obligatorio");
+    onSubmit(form);
+    setForm({ name: "", genre: "", developer: "", description: "", imagesrc: "" });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit(form);
+    <form 
+      onSubmit={handleSubmit} 
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+        maxWidth: "400px",
+        marginBottom: "30px"
       }}
     >
+
       <h2>Agregar Juego</h2>
 
       <input 
         type="text" 
-        placeholder="Nombre" 
+        name="name"
+        placeholder="Nombre"
         value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
+        onChange={handleChange}
       />
 
       <input 
         type="text" 
-        placeholder="Género" 
+        name="genre"
+        placeholder="Género"
         value={form.genre}
-        onChange={(e) => setForm({ ...form, genre: e.target.value })}
+        onChange={handleChange}
       />
 
       <input 
         type="text" 
-        placeholder="Desarrollador" 
+        name="developer"
+        placeholder="Desarrollador"
         value={form.developer}
-        onChange={(e) => setForm({ ...form, developer: e.target.value })}
+        onChange={handleChange}
       />
 
       <textarea
+        name="description"
         placeholder="Descripción"
         value={form.description}
-        onChange={(e) => setForm({ ...form, description: e.target.value })}
+        onChange={handleChange}
       />
 
       <input 
-        type="text" 
+        type="url"
+        name="imagesrc"
         placeholder="URL de imagen"
         value={form.imagesrc}
-        onChange={(e) => setForm({ ...form, imagesrc: e.target.value })}
+        onChange={handleChange}
       />
 
       <button type="submit">Agregar</button>
