@@ -47,7 +47,7 @@ function Library() {
 
   return (
     <div style={{ padding: "20px", color: "white", width: "100%" }}>
-      <h1>🎮 Mi Biblioteca</h1>
+      <h1>🎮 Mi Biblioteca 🕹</h1>
 
       <div style={{ display: "flex", gap: "40px" }}>
         <GameForm onAdd={handleAddGame} />
