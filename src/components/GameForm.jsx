@@ -1,6 +1,10 @@
 import { useState } from "react";
+import StarRating from "./StarRating";
+import Modal from "./Modal";
 
 function GameForm({ onAdd }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     titulo: "",
     genero: "",
@@ -9,7 +13,8 @@ function GameForm({ onAdd }) {
     desarrollador: "",
     imagenPortada: "",
     descripcion: "",
-    completado: false
+    completado: false,
+    puntuacion: 0
   });
 
   function handleChange(e) {
@@ -31,6 +36,7 @@ function GameForm({ onAdd }) {
     const data = await response.json();
     onAdd(data);
 
+    // Resetear formulario
     setFormData({
       titulo: "",
       genero: "",
@@ -39,29 +45,86 @@ function GameForm({ onAdd }) {
       desarrollador: "",
       imagenPortada: "",
       descripcion: "",
-      completado: false
+      completado: false,
+      puntuacion: 0
     });
+
+    setIsOpen(false);
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-      <input name="titulo" placeholder="Título" onChange={handleChange} value={formData.titulo} />
-      <input name="genero" placeholder="Género" onChange={handleChange} value={formData.genero} />
-      <input name="plataforma" placeholder="Plataforma" onChange={handleChange} value={formData.plataforma} />
-      <input name="añoLanzamiento" type="number" placeholder="Año lanzamiento" onChange={handleChange} value={formData.añoLanzamiento} />
-      <input name="desarrollador" placeholder="Desarrollador" onChange={handleChange} value={formData.desarrollador} />
-      <input name="imagenPortada" placeholder="URL Imagen" onChange={handleChange} value={formData.imagenPortada} />
+    <>
+      {/* 🔹 Botón estilo PlayStation 5 */}
+      <button
+        onClick={() => setIsOpen(true)}
+        style={{
+          padding: "12px 22px",
+          borderRadius: "14px",
+          border: "none",
+          cursor: "pointer",
+          color: "#fff",
+          fontSize: "18px",
+          background: "linear-gradient(135deg,#0A84FF,#0059C9)",
+          boxShadow: "0 5px 15px rgba(0,0,0,0.4)",
+          transition: ".2s"
+        }}>
+        🎮 Nuevo
+      </button>
 
-      <textarea name="descripcion" placeholder="Descripción" onChange={handleChange} value={formData.descripcion}></textarea>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          
+          <h2 style={{ textAlign: "center", color: "white", marginBottom: "10px" }}>Agregar Juego</h2>
 
-      <label>
-        <input type="checkbox" name="completado" checked={formData.completado}
-          onChange={(e) => setFormData({ ...formData, completado: e.target.checked })} />
-        Completado
-      </label>
+          <input name="titulo" placeholder="Título" required onChange={handleChange} value={formData.titulo} />
+          <input name="genero" placeholder="Género" onChange={handleChange} value={formData.genero} />
+          <input name="plataforma" placeholder="Plataforma" onChange={handleChange} value={formData.plataforma} />
+          <input name="añoLanzamiento" type="number" placeholder="Año de lanzamiento" onChange={handleChange} value={formData.añoLanzamiento} />
+          <input name="desarrollador" placeholder="Desarrollador" onChange={handleChange} value={formData.desarrollador} />
+          <input name="imagenPortada" placeholder="URL Imagen" onChange={handleChange} value={formData.imagenPortada} />
 
-      <button type="submit">Agregar</button>
-    </form>
+          <textarea
+            name="descripcion"
+            placeholder="Descripción del juego"
+            rows="3"
+            onChange={handleChange}
+            value={formData.descripcion}
+          ></textarea>
+
+          {/* ⭐ Rating */}
+          <label style={{ color: "#ddd" }}>Calificación ⭐</label>
+          <StarRating
+            rating={formData.puntuacion}
+            onChange={(val) => setFormData({ ...formData, puntuacion: val })}
+          />
+
+          {/* Toggle estilo PS5 */}
+          <label style={{ display: "flex", gap: "10px", alignItems: "center", color: "#fff" }}>
+            <input
+              type="checkbox"
+              name="completado"
+              checked={formData.completado}
+              onChange={(e) => setFormData({ ...formData, completado: e.target.checked })}
+              style={{ width: "18px", height: "18px", cursor: "pointer" }}
+            />
+            ¿Completado?
+          </label>
+
+          <button type="submit" style={{
+            padding: "10px",
+            background: "#0A84FF",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            color: "white",
+            fontWeight: "bold",
+            marginTop: "10px"
+          }}>
+            Guardar
+          </button>
+        </form>
+      </Modal>
+    </>
   );
 }
 

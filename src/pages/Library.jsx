@@ -19,20 +19,24 @@ function Library() {
     fetchGames();
   }, []);
 
-  const handleAddGame = async (newGame) => {
-    try {
-      const res = await fetch("http://localhost:3000/api/juegos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newGame),
-      });
+const handleAddGame = async (newGame) => {
+  try {
+    const res = await fetch("http://localhost:3000/api/juegos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newGame),
+    });
 
-      if (!res.ok) throw new Error("Error al agregar juego");
-      fetchGames();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const createdGame = await res.json();
+
+    // Agregarlo al estado sin recargar toda la lista
+    setGames([...games, createdGame]);
+
+  } catch (error) {
+    console.error("Error al agregar juego:", error);
+  }
+};
+
 
   const handleDeleteGame = async (id) => {
     try {
@@ -47,7 +51,7 @@ function Library() {
 
   return (
     <div style={{ padding: "20px", color: "white", width: "100%" }}>
-      <h1>🎮 Mi Biblioteca 🕹</h1>
+      <h1>🎮 Mi Biblioteca 👾</h1>
 
       <div style={{ display: "flex", gap: "40px" }}>
         <GameForm onAdd={handleAddGame} />
