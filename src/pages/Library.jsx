@@ -1,68 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GameCard from "../components/GameCard";
 import GameForm from "../components/GameForm";
 
 function Library() {
   const [games, setGames] = useState([]);
 
-  const handleAddGame = (newGame) => {
-    setGames([...games, newGame]);
+  const fetchGames = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/juegos");
+      const data = await res.json();
+      setGames(data);
+    } catch (error) {
+      console.error("Error al cargar juegos:", error);
+    }
   };
 
-  const handleDeleteGame = (index) => {
-    setGames(games.filter((_, i) => i !== index));
+  useEffect(() => {
+    fetchGames();
+  }, []);
+
+  const handleAddGame = async (newGame) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/juegos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newGame),
+      });
+
+      if (!res.ok) throw new Error("Error al agregar juego");
+      fetchGames();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteGame = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/api/juegos/${id}`, {
+        method: "DELETE",
+      });
+      fetchGames();
+    } catch (error) {
+      console.error("Error eliminando juego:", error);
+    }
   };
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        color: "white",
-        minHeight: "100vh",
-        width: "100%",  // ← AGREGADO PARA OCUPAR TODA LA PÁGINA
-        background: "linear-gradient(135deg, #0a0f1d, #0b1f3a, #0d2a55)",
-      }}
-    >
-      <h1
-        style={{
-          marginBottom: "20px",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-          fontSize: "2.4rem",
-        }}
-      >
-        🎮 Mi Biblioteca
-      </h1>
+    <div style={{ padding: "20px", color: "white", width: "100%" }}>
+      <h1>🎮 Mi Biblioteca</h1>
 
-      {/* CONTENEDOR HORIZONTAL */}
-      <div
-        style={{
-          display: "flex",
-          gap: "40px",
-          alignItems: "flex-start",
-          width: "100%",  // ← AGREGADO PARA QUE EL CONTENEDOR SE EXPANDA
-        }}
-      >
-        {/* FORMULARIO */}
-        <GameForm onSubmit={handleAddGame} />
+      <div style={{ display: "flex", gap: "40px" }}>
+        <GameForm onAdd={handleAddGame} />
 
-        {/* GRID DE JUEGOS */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-            gap: "25px",
-            flex: 1,
-            width: "100%",  //  AGREGADO PARA EXPANDIR EL GRID
-          }}
-        >
-          {games.map((game, index) => (
-            <GameCard
-              key={index}
-              game={game}
-              onDelete={() => handleDeleteGame(index)}
-            />
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gap: "25px", flex: 1
+        }}>
+          {games.map((game) => (
+            <GameCard key={game._id} game={game} onDelete={() => handleDeleteGame(game._id)} />
           ))}
         </div>
       </div>

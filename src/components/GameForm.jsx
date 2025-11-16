@@ -1,160 +1,68 @@
 import { useState } from "react";
 
-function GameForm({ onSubmit }) {
-  const [form, setForm] = useState({
-    name: "",
-    genre: "",
-    developer: "",
-    tags: "",
-    rating: 3,
-    description: "",
-    imagesrc: "",
+function GameForm({ onAdd }) {
+  const [formData, setFormData] = useState({
+    titulo: "",
+    genero: "",
+    plataforma: "",
+    añoLanzamiento: "",
+    desarrollador: "",
+    imagenPortada: "",
+    descripcion: "",
+    completado: false
   });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.name) return alert("El nombre es obligatorio");
-
-    const formattedGame = {
-      ...form,
-      tags: form.tags.split(",").map(tag => tag.trim()),
-    };
-
-    onSubmit(formattedGame);
-
-    setForm({
-      name: "",
-      genre: "",
-      developer: "",
-      tags: "",
-      rating: 3,
-      description: "",
-      imagesrc: "",
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
-  };
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:3000/api/juegos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
+    onAdd(data);
+
+    setFormData({
+      titulo: "",
+      genero: "",
+      plataforma: "",
+      añoLanzamiento: "",
+      desarrollador: "",
+      imagenPortada: "",
+      descripcion: "",
+      completado: false
+    });
+  }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "12px",
-        maxWidth: "320px",
-        padding: "16px",
-        background: "rgba(20, 20, 20, 0.75)",
-        borderRadius: "14px",
-        border: "1px solid #333",
-        backdropFilter: "blur(6px)",
-        marginRight: "30px",
-        boxShadow: "0 0 20px rgba(0,0,0,0.4)",
-      }}
-    >
-      <h2 style={{ color: "#7eb6ff", fontWeight: "bold" }}>Agregar Juego</h2>
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <input name="titulo" placeholder="Título" onChange={handleChange} value={formData.titulo} />
+      <input name="genero" placeholder="Género" onChange={handleChange} value={formData.genero} />
+      <input name="plataforma" placeholder="Plataforma" onChange={handleChange} value={formData.plataforma} />
+      <input name="añoLanzamiento" type="number" placeholder="Año lanzamiento" onChange={handleChange} value={formData.añoLanzamiento} />
+      <input name="desarrollador" placeholder="Desarrollador" onChange={handleChange} value={formData.desarrollador} />
+      <input name="imagenPortada" placeholder="URL Imagen" onChange={handleChange} value={formData.imagenPortada} />
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Nombre"
-        value={form.name}
-        onChange={handleChange}
-        style={inputStyle}
-      />
+      <textarea name="descripcion" placeholder="Descripción" onChange={handleChange} value={formData.descripcion}></textarea>
 
-      <input
-        type="text"
-        name="genre"
-        placeholder="Género"
-        value={form.genre}
-        onChange={handleChange}
-        style={inputStyle}
-      />
-
-      <input
-        type="text"
-        name="developer"
-        placeholder="Desarrollador"
-        value={form.developer}
-        onChange={handleChange}
-        style={inputStyle}
-      />
-
-      <input
-        type="text"
-        name="tags"
-        placeholder="Tags (separadas por comas)"
-        value={form.tags}
-        onChange={handleChange}
-        style={inputStyle}
-      />
-
-      <label style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-        ⭐ Rating:
-        <select
-          name="rating"
-          value={form.rating}
-          onChange={handleChange}
-          style={{
-            padding: "8px",
-            background: "#111",
-            color: "white",
-            border: "1px solid #444",
-            borderRadius: "6px",
-          }}
-        >
-          <option value="1">1 estrella</option>
-          <option value="2">2 estrellas</option>
-          <option value="3">3 estrellas</option>
-          <option value="4">4 estrellas</option>
-          <option value="5">5 estrellas</option>
-        </select>
+      <label>
+        <input type="checkbox" name="completado" checked={formData.completado}
+          onChange={(e) => setFormData({ ...formData, completado: e.target.checked })} />
+        Completado
       </label>
 
-      <textarea
-        name="description"
-        placeholder="Descripción"
-        value={form.description}
-        onChange={handleChange}
-        style={{ ...inputStyle, height: "100px" }}
-      />
-
-      <input
-        type="url"
-        name="imagesrc"
-        placeholder="URL de imagen"
-        value={form.imagesrc}
-        onChange={handleChange}
-        style={inputStyle}
-      />
-
-      <button
-        type="submit"
-        style={{
-          padding: "10px",
-          background: "#1b4fff",
-          border: "none",
-          color: "white",
-          borderRadius: "8px",
-          fontWeight: "bold",
-          cursor: "pointer",
-        }}
-      >
-        Agregar
-      </button>
+      <button type="submit">Agregar</button>
     </form>
   );
 }
-
-const inputStyle = {
-  padding: "10px",
-  background: "#111",
-  border: "1px solid #444",
-  borderRadius: "8px",
-  color: "white",
-};
 
 export default GameForm;
