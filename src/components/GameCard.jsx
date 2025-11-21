@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function GameCard({ game, onDelete, onToggleCompletado }) {
+function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
   const [expanded, setExpanded] = useState(false);
 
   const stars = "⭐".repeat(game.puntuacion || 0);
@@ -38,6 +38,25 @@ function GameCard({ game, onDelete, onToggleCompletado }) {
         ❌
       </button>
 
+      {/* Edit Button */}
+      <button
+        onClick={onEdit}
+        style={{
+          position: "absolute",
+          top: "8px",
+          left: "8px",
+          background: "#0A84FF",
+          border: "none",
+          padding: "6px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          color: "white",
+          fontSize: "14px",
+        }}
+      >
+        ✏️
+      </button>
+      
       {/* Game Image */}
       {game.imagenPortada && (
         <img

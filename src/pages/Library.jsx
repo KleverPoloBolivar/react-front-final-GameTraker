@@ -4,6 +4,7 @@ import GameForm from "../components/GameForm";
 
 function Library() {
   const [games, setGames] = useState([]);
+  const [editingGame, setEditingGame] = useState(null);
 
   const fetchGames = async () => {
     try {
@@ -47,45 +48,61 @@ function Library() {
   };
 
   const toggleCompletado = async (id) => {
-  try {
-    // uso del estado actual con callback para evitar stale closure
-    setGames(prev => {
-      // optimista: actualizamos UI inmediatamente
-      return prev.map(g => g._id === id ? { ...g, completado: !g.completado } : g);
-    });
+    try {
+      setGames(prev =>
+        prev.map(g => g._id === id ? { ...g, completado: !g.completado } : g)
+      );
 
-    // Consigue el juego actual (desde estado previo)
-    const juegoActual = games.find(g => g._id === id);
-    const nuevoValor = { completado: ! (juegoActual?.completado) };
+      const juegoActual = games.find(g => g._id === id);
+      const nuevoValor = { completado: !juegoActual?.completado };
 
-    const res = await fetch(`http://localhost:3000/api/juegos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nuevoValor)
-    });
+      const res = await fetch(`http://localhost:3000/api/juegos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevoValor)
+      });
 
-    if (!res.ok) {
-      // si falla, revertir el cambio en UI y lanzar error
-      const text = await res.text();
-      setGames(prev => prev.map(g => g._id === id ? { ...g, completado: juegoActual ? juegoActual.completado : false } : g));
-      throw new Error(`Error en backend: ${res.status} ${text}`);
+      if (!res.ok) throw new Error("Error al actualizar");
+
+      const updated = await res.json();
+      setGames(prev => prev.map(g => g._id === id ? updated : g));
+    } catch (err) {
+      console.error("toggleCompletado error:", err);
+      alert("No se pudo cambiar el estado.");
     }
+  };
 
-    const updated = await res.json();
-    // sincronizamos el estado con lo que devolvió el servidor
-    setGames(prev => prev.map(g => g._id === id ? updated : g));
-  } catch (err) {
-    console.error("toggleCompletado error:", err);
-    alert("No se pudo cambiar el estado. Revisa la consola.");
-  }
-};
+  const handleEditGame = (game) => {
+    setEditingGame(game);
+  };
+
+  const handleUpdateGame = async (updatedGame) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/juegos/${updatedGame._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedGame),
+      });
+
+      const data = await res.json();
+
+      setGames(games.map(g => g._id === data._id ? data : g));
+      setEditingGame(null);
+    } catch (err) {
+      console.error("Error al actualizar juego:", err);
+    }
+  };
 
   return (
     <div style={{ padding: "20px", color: "white", width: "100%" }}>
       <h1>🎮 Mi Biblioteca 👾</h1>
 
       <div style={{ display: "flex", gap: "40px" }}>
-        <GameForm onAdd={handleAddGame} />
+        <GameForm 
+          onAdd={handleAddGame} 
+          onUpdate={handleUpdateGame}
+          editingGame={editingGame}
+        />
 
         <div
           style={{
@@ -101,6 +118,7 @@ function Library() {
               game={game}
               onDelete={() => handleDeleteGame(game._id)}
               onToggleCompletado={toggleCompletado}
+              onEdit={() => handleEditGame(game)}
             />
           ))}
         </div>
