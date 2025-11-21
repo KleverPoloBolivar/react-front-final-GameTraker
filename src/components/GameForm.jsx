@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StarRating from "./StarRating";
 import Modal from "./Modal";
 
-function GameForm({ onAdd }) {
+function GameForm({ onAdd, onUpdate, editingGame }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -17,6 +17,13 @@ function GameForm({ onAdd }) {
     puntuacion: 0
   });
 
+  useEffect(() => {
+    if (editingGame) {
+      setIsOpen(true);
+      setFormData(editingGame);
+    }
+  }, [editingGame]);
+
   function handleChange(e) {
     setFormData({
       ...formData,
@@ -27,16 +34,12 @@ function GameForm({ onAdd }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/api/juegos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    });
+    if (editingGame) {
+      await onUpdate(formData);
+    } else {
+      await onAdd(formData);
+    }
 
-    const data = await response.json();
-    onAdd(data);
-
-    // Resetear formulario
     setFormData({
       titulo: "",
       genero: "",
@@ -54,27 +57,30 @@ function GameForm({ onAdd }) {
 
   return (
     <>
-      {/* 🔹 Botón estilo PlayStation 5 */}
-      <button
-        onClick={() => setIsOpen(true)}
-        style={{
-          padding: "12px 22px",
-          borderRadius: "14px",
-          border: "none",
-          cursor: "pointer",
-          color: "#fff",
-          fontSize: "18px",
-          background: "linear-gradient(135deg,#0A84FF,#0059C9)",
-          boxShadow: "0 5px 15px rgba(0,0,0,0.4)",
-          transition: ".2s"
-        }}>
-        🎮 Nuevo
-      </button>
+      {!editingGame && (
+        <button
+          onClick={() => setIsOpen(true)}
+          style={{
+            padding: "12px 22px",
+            borderRadius: "14px",
+            border: "none",
+            cursor: "pointer",
+            color: "#fff",
+            fontSize: "18px",
+            background: "linear-gradient(135deg,#0A84FF,#0059C9)",
+            boxShadow: "0 5px 15px rgba(0,0,0,0.4)",
+            transition: ".2s"
+          }}>
+          🎮 Nuevo
+        </button>
+      )}
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           
-          <h2 style={{ textAlign: "center", color: "white", marginBottom: "10px" }}>Agregar Juego</h2>
+          <h2 style={{ textAlign: "center", color: "white", marginBottom: "10px" }}>
+            {editingGame ? "✏️ Editar Juego" : "Agregar Juego"}
+          </h2>
 
           <input name="titulo" placeholder="Título" required onChange={handleChange} value={formData.titulo} />
           <input name="genero" placeholder="Género" onChange={handleChange} value={formData.genero} />
@@ -91,14 +97,12 @@ function GameForm({ onAdd }) {
             value={formData.descripcion}
           ></textarea>
 
-          {/* ⭐ Rating */}
           <label style={{ color: "#ddd" }}>Calificación ⭐</label>
           <StarRating
             rating={formData.puntuacion}
             onChange={(val) => setFormData({ ...formData, puntuacion: val })}
           />
 
-          {/* Toggle estilo PS5 */}
           <label style={{ display: "flex", gap: "10px", alignItems: "center", color: "#fff" }}>
             <input
               type="checkbox"
@@ -120,7 +124,7 @@ function GameForm({ onAdd }) {
             fontWeight: "bold",
             marginTop: "10px"
           }}>
-            Guardar
+            {editingGame ? "💾 Guardar cambios" : "Guardar"}
           </button>
         </form>
       </Modal>
