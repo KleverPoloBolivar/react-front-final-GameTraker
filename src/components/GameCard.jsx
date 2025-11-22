@@ -178,7 +178,7 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit, onReview }) {
 
       {/* Botón ver reseña */}
       <button
-        onClick={onReview}
+      onClick={() => onReview(game)}
         style={{
           marginTop: "10px",
           width: "100%",
