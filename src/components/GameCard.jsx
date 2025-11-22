@@ -3,23 +3,23 @@ import { useState } from "react";
 function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
   const [expanded, setExpanded] = useState(false);
 
+  const cardStyle = {
+    backdropFilter: "blur(10px)",
+    background: "rgba(255,255,255,0.08)",
+    borderRadius: "18px",
+    padding: "16px",
+    border: "1px solid rgba(255,255,255,0.15)",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+    position: "relative",
+    overflow: "hidden",
+  };
+
   const stars = "⭐".repeat(game.puntuacion || 0);
   const ratingNumber = game.puntuacion ? `${game.puntuacion}/5` : "Sin calificación";
 
   return (
-    <div
-      style={{
-        backdropFilter: "blur(10px)",
-        background: "rgba(255,255,255,0.08)",
-        borderRadius: "18px",
-        padding: "16px",
-        border: "1px solid rgba(255,255,255,0.15)",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
-        transition: "0.25s",
-        position: "relative",
-      }}
-    >
-      {/* Delete Button */}
+    <div className="game-card" style={cardStyle}>
+      {/* Botón eliminar */}
       <button
         onClick={onDelete}
         style={{
@@ -33,12 +33,13 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           cursor: "pointer",
           color: "white",
           fontSize: "14px",
+          zIndex: 3,
         }}
       >
         ❌
       </button>
 
-      {/* Edit Button */}
+      {/* Botón editar */}
       <button
         onClick={onEdit}
         style={{
@@ -52,12 +53,12 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           cursor: "pointer",
           color: "white",
           fontSize: "14px",
+          zIndex: 3,
         }}
       >
         ✏️
       </button>
-      
-      {/* Game Image */}
+
       {game.imagenPortada && (
         <img
           src={game.imagenPortada}
@@ -68,28 +69,61 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
             borderRadius: "12px",
             objectFit: "cover",
             marginBottom: "10px",
+            position: "relative",
+            zIndex: 3,
           }}
         />
       )}
 
-      {/* Title */}
-      <h3 style={{ color: "white", marginBottom: "6px", fontSize: "1.2rem" }}>
+      <h3
+        style={{
+          color: "white",
+          marginBottom: "6px",
+          fontSize: "1.2rem",
+          position: "relative",
+          zIndex: 3,
+        }}
+      >
         {game.titulo}
       </h3>
 
-      {/* Rating */}
-      <p style={{ color: "#9cf", fontSize: "15px", marginBottom: "10px" }}>
+      <p
+        style={{
+          color: "#9cf",
+          fontSize: "15px",
+          marginBottom: "10px",
+          position: "relative",
+          zIndex: 3,
+        }}
+      >
         {stars} <span style={{ color: "#ccc" }}>({ratingNumber})</span>
       </p>
 
-      {/* Info */}
-      <p style={{ color: "#ccc", fontSize: "13px" }}><strong>🎮 Plataforma:</strong> {game.plataforma}</p>
-      <p style={{ color: "#ccc", fontSize: "13px" }}><strong>🧪 Género:</strong> {game.genero}</p>
-      <p style={{ color: "#ccc", fontSize: "13px" }}><strong>🏷️ Año:</strong> {game.añoLanzamiento}</p>
-      <p style={{ color: "#ccc", fontSize: "13px" }}><strong>🏢 Dev:</strong> {game.desarrollador}</p>
+      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+        <strong>🎮 Plataforma:</strong> {game.plataforma}
+      </p>
 
-      {/* Completed Status */}
-      <p style={{ fontWeight: "bold", marginTop: "6px", color: "white" }}>
+      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+        <strong>🧪 Género:</strong> {game.genero}
+      </p>
+
+      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+        <strong>🏷️ Año:</strong> {game.añoLanzamiento}
+      </p>
+
+      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+        <strong>🏢 Dev:</strong> {game.desarrollador}
+      </p>
+
+      <p
+        style={{
+          fontWeight: "bold",
+          marginTop: "6px",
+          color: "white",
+          position: "relative",
+          zIndex: 3,
+        }}
+      >
         {game.completado ? "✔️ Completado" : "⏳ Pendiente"}
       </p>
 
@@ -105,12 +139,13 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           cursor: "pointer",
           marginTop: "6px",
           fontWeight: "bold",
+          position: "relative",
+          zIndex: 3,
         }}
       >
         {game.completado ? "Marcar como pendiente" : "Marcar como completado"}
       </button>
 
-      {/* Expandable Description */}
       <button
         onClick={() => setExpanded(!expanded)}
         style={{
@@ -123,13 +158,23 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           color: "#d0e4ff",
           cursor: "pointer",
           fontWeight: "bold",
+          position: "relative",
+          zIndex: 3,
         }}
       >
         {expanded ? "Ocultar descripción" : "Ver descripción"}
       </button>
 
       {expanded && (
-        <p style={{ color: "#aaa", marginTop: "10px", fontSize: "13px" }}>
+        <p
+          style={{
+            color: "#aaa",
+            marginTop: "10px",
+            fontSize: "13px",
+            zIndex: 3,
+            position: "relative",
+          }}
+        >
           {game.descripcion}
         </p>
       )}
