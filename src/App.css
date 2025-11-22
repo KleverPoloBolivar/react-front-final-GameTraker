@@ -6,6 +6,7 @@
   text-align: left;
 }
 
+/* LOGOS */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -22,12 +23,8 @@
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -36,10 +33,166 @@
   }
 }
 
+/* CARDS */
 .card {
   padding: 2em;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* ---------------------------------------------------------------------- */
+/*  🔥 SOLUCIÓN: FONDO FIJO SIN ROMPER LA REVIEW */
+/* ---------------------------------------------------------------------- */
+
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  min-width: 320px;
+  display: block;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url(/img/retard.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Fondo animado movido al ::before */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url(/img/retard.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  z-index: -1;
+  animation: backgroundBreathing 18s ease-in-out infinite;
+}
+
+@keyframes backgroundBreathing {
+  0% { filter: brightness(0.95) saturate(1); }
+  50% { filter: brightness(1.08) saturate(1.12); }
+  100% { filter: brightness(0.95) saturate(1); }
+}
+
+/* ---------------------------------------------------------------------- */
+/*  🔥 PANEL DE RESEÑA (FUNCIONA CON POSITION FIXED) */
+/* ---------------------------------------------------------------------- */
+
+.review-panel {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 380px;
+  height: 100%;
+  background: rgba(40, 0, 10, 0.95);
+  backdrop-filter: blur(12px);
+  border-left: 1px solid rgba(255, 200, 200, 0.2);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.6);
+  transition: right 0.35s ease;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.review-panel.open {
+  right: 0;
+}
+
+.review-panel h2 {
+  color: #ffd9e6;
+  margin-bottom: 10px;
+}
+
+.review-panel textarea {
+  width: 100%;
+  height: 180px;
+  background: rgba(255, 230, 235, 0.1);
+  border: 1px solid rgba(255, 200, 200, 0.3);
+  border-radius: 10px;
+  color: #ffe0ea;
+  padding: 10px;
+  font-size: 14px;
+  resize: none;
+}
+
+.review-panel button {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(150, 0, 30, 0.4);
+  border: 1px solid rgba(255, 200, 200, 0.4);
+  color: #ffd9e4;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.review-panel button:hover {
+  background: rgba(200, 0, 40, 0.45);
+}
+
+/* ---------------------------------------------------------------------- */
+/*  🔥 ANIMACIÓN GAMECARD (RESTAURADA Y COMPLETA) */
+/* ---------------------------------------------------------------------- */
+
+.game-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+/* Neblina con animación */
+.game-card::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+
+  opacity: 0.9;
+  filter: blur(45px);
+  pointer-events: none;
+
+  animation: fogCardFlow 14s linear infinite;
+}
+
+@keyframes fogCardFlow {
+  0% { transform: translateX(-10%) translateY(0%) scale(1.1); }
+  50% { transform: translateX(10%) translateY(5%) scale(1.15); }
+  100% { transform: translateX(-10%) translateY(0%) scale(1.1); }
+}
+
+/* Hover 3D */
+.game-card:hover {
+  transform: translateY(-10px) scale(1.03);
+}
+
+/* Glow al acercar */
+.game-card:hover {
+  box-shadow:
+    0 0 18px rgba(0, 140, 255, 0.55),
+    0 0 30px rgba(0, 80, 255, 0.35);
 }
