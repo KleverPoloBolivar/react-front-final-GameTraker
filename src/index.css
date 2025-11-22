@@ -42,9 +42,9 @@
   color: #888;
 }
 
-/* ---------------------------------------------------------------------- */
-/*  🔥 FONDO DEL BODY (EL TUYO QUEDA IGUAL) */
-/* ---------------------------------------------------------------------- */
+
+/*FONDO DEL BODY*/
+
 
 body {
   margin: 0;
@@ -64,9 +64,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ---------------------------------------------------------------------- */
-/*  🌫️🌫️ CAPA DE NEBLINA REAL (AGREGADA COMO PEDISTE) 🌫️🌫️ */
-/* ---------------------------------------------------------------------- */
+/*  CAPA DE NEBLINA klever */
 
 body::before {
   content: "";
@@ -75,7 +73,7 @@ body::before {
   width: 110%;
   height: 110%;
 
-  background: url("/img/neblina.png"); /* ← AQUÍ VA TU IMAGEN */
+  background: url("/img/neblina.png"); /* aqui va la imagen klever */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -87,16 +85,14 @@ body::before {
   animation: fogMove 22s ease-in-out infinite;
 }
 
-/* Animación de la neblina */
+/* Animacion de la neblina */
 @keyframes fogMove {
   0% { transform: translate(-3%, -3%) scale(1.05); opacity: 0.28; }
   50% { transform: translate(4%, 4%) scale(1.12); opacity: 0.42; }
   100% { transform: translate(-3%, -3%) scale(1.05); opacity: 0.28; }
 }
 
-/* ---------------------------------------------------------------------- */
-/*  ⭐⭐⭐ ANIMACIONES DEL GAMECARD (TUS ANIMACIONES ORIGINALES) ⭐⭐⭐ */
-/* ---------------------------------------------------------------------- */
+/*   ANIMACIONES DEL GAMECARD LAS ANTERIORES KLEVER  */
 
 @keyframes vinotintoGlow {
   0% { box-shadow: 0 0 10px rgba(150, 0, 50, 0.4); }
@@ -110,9 +106,7 @@ body::before {
   100% { transform: translate(-10px, -10px) scale(1); opacity: 0.35; }
 }
 
-/* ---------------------------------------------------------------------- */
-/*  ⭐⭐⭐ PANEL DE RESEÑA ⭐⭐⭐ */
-/* ---------------------------------------------------------------------- */
+/*   PANEL DE RESEÑA  */
 
 .review-panel {
   position: fixed;

@@ -49,7 +49,7 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit, onReview }) {
         }}
       />
 
-      {/* Botón eliminar */}
+      {/* Boton eliminar */}
       <button
         onClick={onDelete}
         style={{
@@ -69,7 +69,7 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit, onReview }) {
         ❌
       </button>
 
-      {/* Botón editar */}
+      {/* Boton editar */}
       <button
         onClick={onEdit}
         style={{

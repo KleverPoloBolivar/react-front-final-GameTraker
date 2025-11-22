@@ -24,7 +24,7 @@ function Library() {
   };
 
   useEffect(() => {
-    fetchGames();
+  fetchGames();
   }, []);
 
   const handleAddGame = async (newGame) => {
