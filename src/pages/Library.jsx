@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import GameCard from "../components/GameCard";
 import GameForm from "../components/GameForm";
+import ReviewForm from "../components/ReviewForm";
+import ReviewList from "../components/ReviewList";
 
 function Library() {
   const [games, setGames] = useState([]);
@@ -8,7 +10,8 @@ function Library() {
 
   const [selectedGame, setSelectedGame] = useState(null);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const [reviewText, setReviewText] = useState("");
+
+  const [gameReviews, setGameReviews] = useState([]);
 
   const fetchGames = async () => {
     try {
@@ -64,8 +67,6 @@ function Library() {
         body: JSON.stringify(nuevoValor),
       });
 
-      if (!res.ok) throw new Error("Error al actualizar estado");
-
       const updated = await res.json();
 
       setGames((prev) => prev.map((g) => (g._id === id ? updated : g)));
@@ -75,9 +76,8 @@ function Library() {
     }
   };
 
-  // ← ← ← FIX aplicado aquí
   const handleEditGame = (game) => {
-    setEditingGame({ ...game }); // <- CLONAR evita el bug
+    setEditingGame({ ...game });
   };
 
   const handleUpdateGame = async (updatedGame) => {
@@ -95,47 +95,40 @@ function Library() {
 
       setGames((prev) => prev.map((g) => (g._id === data._id ? data : g)));
 
-      setEditingGame(null); // ← limpiar para cerrar el formulario
+      setEditingGame(null);
     } catch (err) {
       console.error("Error al actualizar juego:", err);
     }
   };
 
-  const handleOpenReview = (game) => {
+  // 💛 Cambiado: ahora usa /api/reviews
+  const handleOpenReview = async (game) => {
+    console.log("📌 Abriendo reseñas de:", game);
     setSelectedGame(game);
-    setReviewText(game.reseña || "");
+
+    const res = await fetch(`http://localhost:3000/api/reviews/${game._id}`);
+    const reviews = await res.json();
+    setGameReviews(reviews);
+
     setIsReviewOpen(true);
   };
 
   const handleCloseReview = () => {
     setIsReviewOpen(false);
     setSelectedGame(null);
-    setReviewText("");
+    setGameReviews([]);
   };
 
-  const handleSaveReview = async () => {
-    if (!selectedGame) return;
+  // 📝 Guardar reseña REAL usando la ruta correcta
+  const handleSubmitReview = async (reviewData) => {
+    const res = await fetch("http://localhost:3000/api/reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...reviewData, juegoId: selectedGame._id }),
+    });
 
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/juegos/${selectedGame._id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reseña: reviewText }),
-        }
-      );
-
-      const updated = await res.json();
-
-      setGames((prev) =>
-        prev.map((g) => (g._id === updated._id ? updated : g))
-      );
-
-      handleCloseReview();
-    } catch (err) {
-      console.error("Error guardando reseña:", err);
-    }
+    const newReview = await res.json();
+    setGameReviews((prev) => [...prev, newReview]);
   };
 
   return (
@@ -165,12 +158,13 @@ function Library() {
               onDelete={() => handleDeleteGame(game._id)}
               onToggleCompletado={toggleCompletado}
               onEdit={() => handleEditGame(game)}
-              onReview={() => handleOpenReview(game)}
+              onReview={handleOpenReview}
             />
           ))}
         </div>
       </div>
 
+      {/* PANEL RESEÑAS */}
       <div
         style={{
           position: "fixed",
@@ -205,40 +199,11 @@ function Library() {
 
         {selectedGame && (
           <>
-            <h2>Reseña de {selectedGame.titulo}</h2>
+            <h2>⭐ Reseñas de {selectedGame.titulo}</h2>
 
-            <textarea
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-              style={{
-                width: "100%",
-                height: "220px",
-                borderRadius: "10px",
-                background: "#330A0A",
-                color: "white",
-                border: "1px solid #771515",
-                padding: "10px",
-                marginTop: "10px",
-                resize: "none",
-              }}
-            />
+            <ReviewForm onSubmit={handleSubmitReview} />
 
-            <button
-              onClick={handleSaveReview}
-              style={{
-                marginTop: "20px",
-                padding: "12px",
-                width: "100%",
-                background: "#8A0B24",
-                border: "none",
-                borderRadius: "10px",
-                color: "white",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Guardar reseña
-            </button>
+            <ReviewList reviews={gameReviews} />
           </>
         )}
       </div>
