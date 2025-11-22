@@ -17,6 +17,7 @@ function GameForm({ onAdd, onUpdate, editingGame }) {
     puntuacion: 0
   });
 
+  // 🔥 Cuando se edita un juego → abrir modal PERO SIN ocultar el botón
   useEffect(() => {
     if (editingGame) {
       setIsOpen(true);
@@ -40,6 +41,7 @@ function GameForm({ onAdd, onUpdate, editingGame }) {
       await onAdd(formData);
     }
 
+    // Reset
     setFormData({
       titulo: "",
       genero: "",
@@ -57,35 +59,48 @@ function GameForm({ onAdd, onUpdate, editingGame }) {
 
   return (
     <>
-      {!editingGame && (
-        <button
-          onClick={() => setIsOpen(true)}
-          style={{
-            padding: "12px 22px",
-            borderRadius: "14px",
-            cursor: "pointer",
-            fontSize: "18px",
-            fontWeight: "600",
-            color: "#fff",
-            background: "linear-gradient(135deg, #4B0E17, #7A1F2A)",
-            border: "2px solid #ffffff22",
-            boxShadow: "0 0 10px #7A1F2A55",
-            transition: "0.25s",
-            marginBottom: "20px"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0 0 18px #7A1F2Aaa";
-            e.currentTarget.style.transform = "scale(1.05)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "0 0 10px #7A1F2A55";
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-        >
-          🎮 Nuevo
-        </button>
-      )}
+      {/* ⭐ EL BOTÓN SIEMPRE SE MUESTRA */}
+      <button
+        onClick={() => {
+          setFormData({
+            titulo: "",
+            genero: "",
+            plataforma: "",
+            añoLanzamiento: "",
+            desarrollador: "",
+            imagenPortada: "",
+            descripcion: "",
+            completado: false,
+            puntuacion: 0
+          });
+          setIsOpen(true);
+        }}
+        style={{
+          padding: "12px 22px",
+          borderRadius: "14px",
+          cursor: "pointer",
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "#fff",
+          background: "linear-gradient(135deg, #4B0E17, #7A1F2A)",
+          border: "2px solid #ffffff22",
+          boxShadow: "0 0 10px #7A1F2A55",
+          transition: "0.25s",
+          marginBottom: "20px"
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 18px #7A1F2Aaa";
+          e.currentTarget.style.transform = "scale(1.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 10px #7A1F2A55";
+          e.currentTarget.style.transform = "scale(1)";
+        }}
+      >
+        🎮 Nuevo
+      </button>
 
+      {/* MODAL */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <form
           onSubmit={handleSubmit}
