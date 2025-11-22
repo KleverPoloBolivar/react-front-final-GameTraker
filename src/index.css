@@ -5,6 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+
   background-color: #242424;
 
   font-synthesis: none;
@@ -27,7 +28,24 @@ body {
   width: 100%;
   min-height: 100vh;
   min-width: 320px;
-  display: block;        /* ← FIX */
+  display: block;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url(/img/retard.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  animation: backgroundBreathing 18s ease-in-out infinite;
+}
+
+/* ✨ Animación suave del fondo */
+@keyframes backgroundBreathing {
+  0% { filter: brightness(0.95) saturate(1); }
+  50% { filter: brightness(1.08) saturate(1.12); }
+  100% { filter: brightness(0.95) saturate(1); }
 }
 
 h1 {
@@ -52,6 +70,73 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* ----------------------------------------------------- */
+/* 🎮✨ EFECTOS APLICADOS SOLO A LAS CARTAS DE LOS JUEGOS */
+/* ----------------------------------------------------- */
+
+.game-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+/* 💨 Neblina interna SOLO en la GameCard — AHORA BLANCA */
+.game-card::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+
+  opacity: 0.9;
+  filter: blur(45px);
+  pointer-events: none;
+
+  animation: fogCardFlow 14s linear infinite;
+}
+
+/* Animación exclusiva para las cartas */
+@keyframes fogCardFlow {
+  0% { transform: translateX(-10%) translateY(0%) scale(1.1); }
+  50% { transform: translateX(10%) translateY(5%) scale(1.15); }
+  100% { transform: translateX(-10%) translateY(0%) scale(1.1); }
+}
+
+/* ----------------------------------------------------- */
+/* ✨ Nueva animación vinotinto para botones */
+/* ----------------------------------------------------- */
+@keyframes vinotintoButtonPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(140, 0, 30, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(200, 0, 50, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(140, 0, 30, 0.4);
+  }
+}
+
+/* ✨ Efecto 3D hover */
+.game-card:hover {
+  transform: translateY(-10px) scale(1.03);
+}
+
+/* ✨ Glow suave solo en hover */
+.game-card:hover {
+  box-shadow:
+    0 0 18px rgba(0, 140, 255, 0.55),
+    0 0 30px rgba(0, 80, 255, 0.35);
 }
 
 @media (prefers-color-scheme: light) {

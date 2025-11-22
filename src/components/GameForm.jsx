@@ -63,21 +63,38 @@ function GameForm({ onAdd, onUpdate, editingGame }) {
           style={{
             padding: "12px 22px",
             borderRadius: "14px",
-            border: "none",
             cursor: "pointer",
-            color: "#fff",
             fontSize: "18px",
-            background: "linear-gradient(135deg,#0A84FF,#0059C9)",
-            boxShadow: "0 5px 15px rgba(0,0,0,0.4)",
-            transition: ".2s"
-          }}>
+            fontWeight: "600",
+            color: "#fff",
+            background: "linear-gradient(135deg, #4B0E17, #7A1F2A)",
+            border: "2px solid #ffffff22",
+            boxShadow: "0 0 10px #7A1F2A55",
+            transition: "0.25s",
+            marginBottom: "20px"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = "0 0 18px #7A1F2Aaa";
+            e.currentTarget.style.transform = "scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = "0 0 10px #7A1F2A55";
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+        >
           🎮 Nuevo
         </button>
       )}
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px"
+          }}
+        >
           <h2 style={{ textAlign: "center", color: "white", marginBottom: "10px" }}>
             {editingGame ? "✏️ Editar Juego" : "Agregar Juego"}
           </h2>
@@ -114,16 +131,29 @@ function GameForm({ onAdd, onUpdate, editingGame }) {
             ¿Completado?
           </label>
 
-          <button type="submit" style={{
-            padding: "10px",
-            background: "#0A84FF",
-            border: "none",
-            borderRadius: "10px",
-            cursor: "pointer",
-            color: "white",
-            fontWeight: "bold",
-            marginTop: "10px"
-          }}>
+          <button
+            type="submit"
+            style={{
+              padding: "10px",
+              background: "linear-gradient(135deg, #4B0E17, #7A1F2A)",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              color: "white",
+              fontWeight: "bold",
+              marginTop: "10px",
+              boxShadow: "0 0 10px #7A1F2A55",
+              transition: "0.25s"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "0 0 18px #7A1F2Aaa";
+              e.currentTarget.style.transform = "scale(1.04)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "0 0 10px #7A1F2A55";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
             {editingGame ? "💾 Guardar cambios" : "Guardar"}
           </button>
         </form>
