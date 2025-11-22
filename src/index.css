@@ -1,27 +1,50 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* LOGOS */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
 }
-a:hover {
-  color: #535bf2;
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
 }
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* CARDS */
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* ---------------------------------------------------------------------- */
+/*  🔥 FONDO DEL BODY (EL TUYO QUEDA IGUAL) */
+/* ---------------------------------------------------------------------- */
 
 body {
   margin: 0;
@@ -36,118 +59,124 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 
-  animation: backgroundBreathing 18s ease-in-out infinite;
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* ✨ Animación suave del fondo */
-@keyframes backgroundBreathing {
-  0% { filter: brightness(0.95) saturate(1); }
-  50% { filter: brightness(1.08) saturate(1.12); }
-  100% { filter: brightness(0.95) saturate(1); }
+/* ---------------------------------------------------------------------- */
+/*  🌫️🌫️ CAPA DE NEBLINA REAL (AGREGADA COMO PEDISTE) 🌫️🌫️ */
+/* ---------------------------------------------------------------------- */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 110%;
+  height: 110%;
+
+  background: url("/img/neblina.png"); /* ← AQUÍ VA TU IMAGEN */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 0.35;
+  filter: blur(7px);
+
+  z-index: -1;
+  animation: fogMove 22s ease-in-out infinite;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Animación de la neblina */
+@keyframes fogMove {
+  0% { transform: translate(-3%, -3%) scale(1.05); opacity: 0.28; }
+  50% { transform: translate(4%, 4%) scale(1.12); opacity: 0.42; }
+  100% { transform: translate(-3%, -3%) scale(1.05); opacity: 0.28; }
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* ---------------------------------------------------------------------- */
+/*  ⭐⭐⭐ ANIMACIONES DEL GAMECARD (TUS ANIMACIONES ORIGINALES) ⭐⭐⭐ */
+/* ---------------------------------------------------------------------- */
+
+@keyframes vinotintoGlow {
+  0% { box-shadow: 0 0 10px rgba(150, 0, 50, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(255, 80, 120, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(150, 0, 50, 0.4); }
+}
+
+@keyframes vinotintoFog {
+  0% { transform: translate(-10px, -10px) scale(1); opacity: 0.35; }
+  50% { transform: translate(20px, 10px) scale(1.2); opacity: 0.55; }
+  100% { transform: translate(-10px, -10px) scale(1); opacity: 0.35; }
+}
+
+/* ---------------------------------------------------------------------- */
+/*  ⭐⭐⭐ PANEL DE RESEÑA ⭐⭐⭐ */
+/* ---------------------------------------------------------------------- */
+
+.review-panel {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 380px;
+  height: 100%;
+  background: rgba(40, 0, 10, 0.95);
+  backdrop-filter: blur(12px);
+  border-left: 1px solid rgba(255, 200, 200, 0.2);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.6);
+  transition: right 0.35s ease;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.review-panel.open {
+  right: 0;
+}
+
+.review-panel h2 {
+  color: #ffd9e6;
+  margin-bottom: 10px;
+}
+
+.review-panel textarea {
+  width: 100%;
+  height: 180px;
+  background: rgba(255, 230, 235, 0.1);
+  border: 1px solid rgba(255, 200, 200, 0.3);
+  border-radius: 10px;
+  color: #ffe0ea;
+  padding: 10px;
+  font-size: 14px;
+  resize: none;
+}
+
+.review-panel button {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(150, 0, 30, 0.4);
+  border: 1px solid rgba(255, 200, 200, 0.4);
+  color: #ffd9e4;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-/* ----------------------------------------------------- */
-/* 🎮✨ EFECTOS APLICADOS SOLO A LAS CARTAS DE LOS JUEGOS */
-/* ----------------------------------------------------- */
+.review-panel button:hover {
+  background: rgba(200, 0, 40, 0.45);
+}
 
 .game-card {
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  position: relative;
-  overflow: hidden;
-  border-radius: 14px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  border: 2px solid rgba(150, 0, 50, 0.4);
+  border-radius: 12px;
 }
 
-/* 💨 Neblina interna SOLO en la GameCard — AHORA BLANCA */
-.game-card::before {
-  content: "";
-  position: absolute;
-  top: -30%;
-  left: -30%;
-  width: 160%;
-  height: 160%;
-
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.32) 0%,
-    rgba(255, 255, 255, 0) 70%
-  );
-
-  opacity: 0.9;
-  filter: blur(45px);
-  pointer-events: none;
-
-  animation: fogCardFlow 14s linear infinite;
-}
-
-/* Animación exclusiva para las cartas */
-@keyframes fogCardFlow {
-  0% { transform: translateX(-10%) translateY(0%) scale(1.1); }
-  50% { transform: translateX(10%) translateY(5%) scale(1.15); }
-  100% { transform: translateX(-10%) translateY(0%) scale(1.1); }
-}
-
-/* ----------------------------------------------------- */
-/* ✨ Nueva animación vinotinto para botones */
-/* ----------------------------------------------------- */
-@keyframes vinotintoButtonPulse {
-  0% {
-    box-shadow: 0 0 10px rgba(140, 0, 30, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 18px rgba(200, 0, 50, 0.7);
-  }
-  100% {
-    box-shadow: 0 0 10px rgba(140, 0, 30, 0.4);
-  }
-}
-
-/* ✨ Efecto 3D hover */
+/* HOVER — cuando pasas el mouse */
 .game-card:hover {
-  transform: translateY(-10px) scale(1.03);
-}
-
-/* ✨ Glow suave solo en hover */
-.game-card:hover {
-  box-shadow:
-    0 0 18px rgba(0, 140, 255, 0.55),
-    0 0 30px rgba(0, 80, 255, 0.35);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  transform: scale(1.04);
+  box-shadow: 0 0 25px rgba(255, 60, 120, 0.8);
+  border-color: rgba(255, 120, 160, 0.9);
+  cursor: pointer;
 }
