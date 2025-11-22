@@ -32,7 +32,7 @@ body {
 
   background:
     linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-    url(/img/fondo.jpeg);
+    url(/img/retard.jpg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -83,7 +83,7 @@ button:focus-visible {
   border-radius: 14px;
 }
 
-/* 💨 Neblina interna SOLO en la GameCard (más visible ahora) */
+/* 💨 Neblina interna SOLO en la GameCard — AHORA BLANCA */
 .game-card::before {
   content: "";
   position: absolute;
@@ -91,12 +91,11 @@ button:focus-visible {
   left: -30%;
   width: 160%;
   height: 160%;
-  
-  /* ⭐ NUEVO: neblina azul luminosa para que resalte */
+
   background: radial-gradient(
     circle,
-    rgba(100, 150, 255, 0.35) 0%,    /* azul rey visible */
-    rgba(100, 150, 255, 0) 70%
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0) 70%
   );
 
   opacity: 0.9;
@@ -111,6 +110,21 @@ button:focus-visible {
   0% { transform: translateX(-10%) translateY(0%) scale(1.1); }
   50% { transform: translateX(10%) translateY(5%) scale(1.15); }
   100% { transform: translateX(-10%) translateY(0%) scale(1.1); }
+}
+
+/* ----------------------------------------------------- */
+/* ✨ Nueva animación vinotinto para botones */
+/* ----------------------------------------------------- */
+@keyframes vinotintoButtonPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(140, 0, 30, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(200, 0, 50, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(140, 0, 30, 0.4);
+  }
 }
 
 /* ✨ Efecto 3D hover */

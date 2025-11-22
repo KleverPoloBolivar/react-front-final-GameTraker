@@ -5,13 +5,14 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
 
   const cardStyle = {
     backdropFilter: "blur(10px)",
-    background: "rgba(255,255,255,0.08)",
+    background: "linear-gradient(145deg, rgba(70,0,10,0.6), rgba(30,0,5,0.8))",
     borderRadius: "18px",
     padding: "16px",
-    border: "1px solid rgba(255,255,255,0.15)",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+    border: "1px solid rgba(180, 0, 40, 0.4)",
+    boxShadow: "0 0 15px rgba(100, 0, 20, 0.6)",
     position: "relative",
     overflow: "hidden",
+    animation: "vinotintoGlow 6s ease-in-out infinite",
   };
 
   const stars = "⭐".repeat(game.puntuacion || 0);
@@ -19,6 +20,23 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
 
   return (
     <div className="game-card" style={cardStyle}>
+      
+      {/* Animación efecto neblina blanca */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-20%",
+          left: "-20%",
+          width: "160%",
+          height: "160%",
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 70%)",
+          animation: "vinotintoFog 9s infinite alternate",
+          filter: "blur(45px)",
+          zIndex: 1,
+        }}
+      />
+
       {/* Botón eliminar */}
       <button
         onClick={onDelete}
@@ -26,7 +44,7 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           position: "absolute",
           top: "8px",
           right: "8px",
-          background: "rgba(200, 0, 0, 0.8)",
+          background: "rgba(180, 0, 40, 0.9)",
           border: "none",
           padding: "6px",
           borderRadius: "6px",
@@ -46,12 +64,12 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           position: "absolute",
           top: "8px",
           left: "8px",
-          background: "#0A84FF",
-          border: "none",
+          background: "rgba(255, 210, 210, 0.2)",
+          border: "1px solid rgba(255,200,200,0.4)",
           padding: "6px",
           borderRadius: "6px",
           cursor: "pointer",
-          color: "white",
+          color: "#ffdddd",
           fontSize: "14px",
           zIndex: 3,
         }}
@@ -89,29 +107,29 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
 
       <p
         style={{
-          color: "#9cf",
+          color: "#ffb3c6",
           fontSize: "15px",
           marginBottom: "10px",
           position: "relative",
           zIndex: 3,
         }}
       >
-        {stars} <span style={{ color: "#ccc" }}>({ratingNumber})</span>
+        {stars} <span style={{ color: "#ffccd5" }}>({ratingNumber})</span>
       </p>
 
-      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+      <p style={{ color: "#ffdde6", fontSize: "13px", zIndex: 3, position: "relative" }}>
         <strong>🎮 Plataforma:</strong> {game.plataforma}
       </p>
 
-      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+      <p style={{ color: "#ffdde6", fontSize: "13px", zIndex: 3, position: "relative" }}>
         <strong>🧪 Género:</strong> {game.genero}
       </p>
 
-      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+      <p style={{ color: "#ffdde6", fontSize: "13px", zIndex: 3, position: "relative" }}>
         <strong>🏷️ Año:</strong> {game.añoLanzamiento}
       </p>
 
-      <p style={{ color: "#ccc", fontSize: "13px", zIndex: 3, position: "relative" }}>
+      <p style={{ color: "#ffdde6", fontSize: "13px", zIndex: 3, position: "relative" }}>
         <strong>🏢 Dev:</strong> {game.desarrollador}
       </p>
 
@@ -130,7 +148,7 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
       <button
         onClick={() => onToggleCompletado(game._id)}
         style={{
-          background: game.completado ? "#444" : "#0A84FF",
+          background: game.completado ? "#55001a" : "#a00026",
           border: "none",
           padding: "10px",
           borderRadius: "10px",
@@ -153,9 +171,9 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
           width: "100%",
           padding: "8px",
           borderRadius: "8px",
-          background: "rgba(180,180,255,0.15)",
-          border: "1px solid rgba(255,255,255,0.25)",
-          color: "#d0e4ff",
+          background: "rgba(150,0,30,0.25)",
+          border: "1px solid rgba(255,200,200,0.3)",
+          color: "#ffd9e4",
           cursor: "pointer",
           fontWeight: "bold",
           position: "relative",
@@ -168,7 +186,7 @@ function GameCard({ game, onDelete, onToggleCompletado, onEdit }) {
       {expanded && (
         <p
           style={{
-            color: "#aaa",
+            color: "#ffccd5",
             marginTop: "10px",
             fontSize: "13px",
             zIndex: 3,
